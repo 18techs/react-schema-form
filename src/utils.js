@@ -457,7 +457,7 @@ const merge = (schema, form, ignore, options, readonly) => {
 
     const stdForm = getDefaults(schema, ignore, options);
     // simple case, we have a "*", just put the stdForm there
-    const idx = form.indexOf("*");
+    const idx = form.indexOf && form.indexOf("*") || -1;
     if (idx !== -1) {
         form = form
             .slice(0, idx)
