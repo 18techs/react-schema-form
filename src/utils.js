@@ -6,6 +6,7 @@ import isUndefined from "lodash/isUndefined";
 import ObjectPath from "objectpath";
 import tv4 from "tv4";
 import notevil from "notevil";
+import _set from "lodash/fp/set";
 
 // Evaluates an expression in a safe way
 const safeEval = (condition, scope) => {
@@ -617,6 +618,20 @@ function selectOrSet(projection, obj, valueToSet, type) {
     return value;
 }
 
+function set(projection, obj, valueToSet, type) {
+    if (!obj) {
+        obj = this;
+    }
+
+    // Support [] array syntax
+    const parts =
+        typeof projection === "string"
+            ? ObjectPath.parse(projection)
+            : projection;
+
+    return _set(parts, valueToSet)(obj);
+}
+
 const validateBySchema = (schema, value) => tv4.validateResult(value, schema);
 
 const validate = (form, value, getLocalizedString) => {
@@ -721,5 +736,6 @@ export default {
     selectOrSet,
     getValueFromModel,
     getTitleByValue,
-    removeEmpty
+    removeEmpty,
+    set
 };
